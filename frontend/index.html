@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToxiGuard — Evil Guardian Chat</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👹</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <h1>TOXI<span>GUARD</span></h1>
+      <p class="tagline" id="tagline">Evil Guardian Chat</p>
+    </div>
+    <div class="status">
+      <span class="dot" id="statusDot"></span>
+      <span id="statusText">CONNECTING</span>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- LEFT: the evil guardian -->
+    <section class="guardian-panel">
+      <div class="stage" id="stage">
+        <svg id="guardianHead" class="guardian-head" viewBox="0 0 220 220" role="img" aria-label="ToxiGuard face">
+          <defs>
+            <radialGradient id="skinGrad" cx="35%" cy="30%" r="80%">
+              <stop offset="0%" stop-color="#a86bff"/>
+              <stop offset="60%" stop-color="#7c3fe4"/>
+              <stop offset="100%" stop-color="#5423ad"/>
+            </radialGradient>
+            <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="6" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <g id="headGroup">
+            <!-- horns -->
+            <path d="M55 55 L35 10 L70 48 Z" fill="#4a1d94"/>
+            <path d="M165 55 L185 10 L150 48 Z" fill="#4a1d94"/>
+
+            <!-- head -->
+            <path d="M110 20
+                     C 165 20 190 60 190 105
+                     C 190 150 165 195 110 200
+                     C 55 195 30 150 30 105
+                     C 30 60 55 20 110 20 Z"
+                  fill="url(#skinGrad)" stroke="#2f0f66" stroke-width="3"/>
+
+            <!-- eyebrows (angry by default) -->
+            <path id="browL" class="brow" d="M62 78 L92 90" stroke="#1c0a3d" stroke-width="7" stroke-linecap="round" fill="none"/>
+            <path id="browR" class="brow" d="M158 78 L128 90" stroke="#1c0a3d" stroke-width="7" stroke-linecap="round" fill="none"/>
+
+            <!-- eyes -->
+            <g id="eyeL">
+              <ellipse cx="80" cy="103" rx="19" ry="22" fill="#0f0620"/>
+              <circle id="pupilL" cx="80" cy="103" r="9" fill="#ffffff"/>
+            </g>
+            <g id="eyeR">
+              <ellipse cx="140" cy="103" rx="19" ry="22" fill="#0f0620"/>
+              <circle id="pupilR" cx="140" cy="103" r="9" fill="#ffffff"/>
+            </g>
+
+            <!-- mouth: shown/hidden depending on mood -->
+            <path id="mouthAngry" class="mouth" d="M75 150 Q110 130 145 150 Q110 160 75 150 Z" fill="#1c0a3d"/>
+            <path id="mouthSmile" class="mouth hidden" d="M72 142 Q110 172 148 142" stroke="#1c0a3d" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path id="mouthWarn" class="mouth hidden" d="M78 148 L142 148" stroke="#1c0a3d" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+            <!-- little fangs -->
+            <path id="fangL" class="fang" d="M85 152 L82 164 L90 154 Z" fill="#f4f0ff"/>
+            <path id="fangR" class="fang" d="M135 152 L138 164 L130 154 Z" fill="#f4f0ff"/>
+          </g>
+        </svg>
+
+        <!-- hand shown only for polite / safe messages -->
+        <svg id="handGood" class="hand-good hidden" viewBox="0 0 120 140" aria-hidden="true">
+          <g>
+            <rect x="40" y="55" width="34" height="70" rx="17" fill="#c98fff"/>
+            <circle cx="57" cy="50" r="20" fill="#c98fff"/>
+            <rect x="45" y="12" width="16" height="42" rx="8" fill="#c98fff" transform="rotate(-8 53 33)"/>
+          </g>
+        </svg>
+      </div>
+
+      <p class="guardian-line" id="guardianLine">I'm watching your words.</p>
+      <p class="guardian-sub" id="guardianSub">Speak normally. I'm watching.</p>
+
+      <div class="meter-block">
+        <div class="meter-label">
+          <span>EVIL METER</span>
+          <span id="meterValue">0%</span>
+        </div>
+        <div class="meter-track">
+          <div class="meter-fill" id="meterFill"></div>
+        </div>
+      </div>
+
+      <label class="voice-toggle">
+        <input type="checkbox" id="voiceToggle" checked>
+        <span>Voice replies</span>
+      </label>
+    </section>
+
+    <!-- RIGHT: chat -->
+    <section class="chat-panel">
+      <div class="chat-window" id="chatWindow">
+        <div class="msg guardian-msg">
+          <span class="avatar">👹</span>
+          <div class="bubble">
+            <p>Welcome. Type in English, Tamil, Telugu or Hindi — I understand plain text and Roman-script mixing too.</p>
+            <p>I'll catch toxic messages before they reach the chat.</p>
+          </div>
+        </div>
+      </div>
+
+      <form id="chatForm" class="composer" autocomplete="off">
+        <input id="chatInput" type="text" placeholder="Type a message… (EN / TA / TE / HI)" maxlength="500">
+        <button type="submit" id="sendBtn">Send</button>
+      </form>
+    </section>
+
+  </main>
+
+  <footer class="footnote">
+    TF-IDF + KNN model · multilingual lexicon safety-net · runs fully offline once trained
+  </footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
